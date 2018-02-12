@@ -26,20 +26,51 @@
     <a-scene altspace=fullspace:true sync-system="author: bookgirl; app: Montreal">
         
  <a-assets>
-     
- 
-     
+  <a-asset-item id="bleacher" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/c-bleachers.dae"></a-asset-item>
+  <a-asset-item id="stage-s" src="https://rawgit.com/Lia021/Montreal/master/stage-s/stage-s.dae"></a-asset-item>
+  <a-asset-item id="pugdesk" src="https://rawgit.com/Lia021/Sloan-talk-show/master/trash/trash.dae"></a-asset-item>
+  <a-asset-item id="garbage" src="https://rawgit.com/Lia021/Sloan-talk-show/master/garbage/garbage.dae"></a-asset-item>  
      
  </a-assets>
       
-      
+ <!--bleacher-->
+     
+ <a-entity position="0 0.01 0" scale="7 7 7"  collada-model="#bleacher"n-mesh-collider="type: environment; convex: false"></a-entity>    
 
+ <!--garbage-->
+     
+  <a-entity position="-11.80 0.45 4.10" scale="15 15 15" rotation="10 110 0" collada-model="#garbage"n-mesh-collider="type: environment; convex: false"></a-entity>
+  
+ <!--stage-s-->
+     
+ <a-entity position="-9 0.01 -1" scale="8 8 8"  collada-model="#stage-s"n-mesh-collider="type: environment; convex: false"></a-entity>    
+ 
+  <!--dumpster-->
+     
+  <a-entity position="-11.50 0.45 4" scale="15 15 15" rotation="0 110 0" collada-model="#pugdesk"n-mesh-collider="type: environment; convex: false"></a-entity>    
+  
+ 
 
  <!-- Textured plane parallel to ground. -->
- <a-plane position="-20 0 0" repeat="11 11"src="https://rawgit.com/Lia021/stage/master/gray%20carpet.jpg" height="50" width="70"altspace-cursor-collider="enabled: false" rotation="-90 0 0"></a-plane>
+ <a-plane position="-20 0 0" repeat="11 11"src="https://rawgit.com/Lia021/Montreal/master/gravel-047_crushed1_2m_r.jpg" height="50" width="70"altspace-cursor-collider="enabled: false" rotation="-90 0 0"></a-plane>
 
 
- 
+  <!--fire-->
+
+  <a-entity n-object='res: effects/fire'position="-11.50 2.70 4.30"></a-entity>
+  
+ <!--fire2-->
+  
+ <a-entity n-object='res: effects/fire'position="-11.50 2.70 3.70"></a-entity>
+  
+ <!--fire3-->
+  
+ <a-entity n-object='res: effects/fire'position="-11.50 2.70 3.05"></a-entity>
+
+ <!--fire4-->
+  
+  <a-entity n-object='res: effects/fire'position="-11.50 2.70 2.40"></a-entity>
+  
 
 
 
