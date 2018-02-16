@@ -28,10 +28,17 @@
  <a-assets>
   <a-asset-item id="bleacher" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/c-bleachers3.dae"></a-asset-item>
   <a-asset-item id="stage-s" src="https://rawgit.com/Lia021/Montreal/master/stage-s/stage-s.dae"></a-asset-item>
-  <a-asset-item id="pugdesk" src="https://rawgit.com/Lia021/Sloan-talk-show/master/trash/trash.dae"></a-asset-item>
+  <a-asset-item id="DUMPSTER" src="https://rawgit.com/Lia021/Sloan-talk-show/master/trash/trash.dae"></a-asset-item>
   <a-asset-item id="garbage" src="https://rawgit.com/Lia021/Sloan-talk-show/master/garbage/garbage.dae"></a-asset-item>  
   <a-asset-item id="wall" src="https://rawgit.com/Lia021/Montreal/master/stage-s/brickwall.dae"></a-asset-item>  
+  <a-asset-item id="bank" src="https://rawgit.com/Lia021/Montreal/master/stage-s/building3.dae"></a-asset-item>  
+  <a-asset-item id="pink" src="https://rawgit.com/Lia021/Montreal/master/stage-s/building4.dae"></a-asset-item>  
+  <a-asset-item id="money" src="https://rawgit.com/Lia021/Montreal/master/stage-s/money-bin.dae"></a-asset-item>
+  <a-asset-item id="martini" src="https://rawgit.com/Lia021/Montreal/master/stage-s/pink-bin.dae"></a-asset-item>
+  <a-asset-item id="trash" src="https://rawgit.com/Lia021/Montreal/master/stage-s/Garbage.dae"></a-asset-item>
   
+
+
 
  </a-assets>
       
@@ -51,11 +58,34 @@
      
  <a-entity position="-8.70 0.01 -1" scale="5 5 5"  collada-model="#wall"n-mesh-collider="type: environment; convex: false"></a-entity>    
  
+ <!--bank-->
+     
+ <a-entity position="-9.10 0.01 7.60" scale="3 3 3"rotation="0 60 0"  collada-model="#bank"n-mesh-collider="type: environment; convex: false"></a-entity>    
+ 
+ <!--pink-->
+     
+ <a-entity position="-9 0.01 -9.60" scale="3 3 3" rotation="0 120 0" collada-model="#pink"n-mesh-collider="type: environment; convex: false"></a-entity>    
+ 
 
   <!--dumpster-->
      
-  <a-entity position="-7.60 0.35 2.38" scale="11.50 11.50 11.50" rotation="0 110 0" collada-model="#pugdesk"n-mesh-collider="type: environment; convex: false"></a-entity>    
+  <a-entity position="-7.60 0.35 2.38" scale="11.50 11.50 11.50" rotation="0 110 0" collada-model="#DUMPSTER"n-mesh-collider="type: environment; convex: false"></a-entity>    
   
+ <!--money-->
+     
+ <a-entity position="-7.70 0.01 4" scale="7 7 7" rotation="0 100 0" collada-model="#money"n-mesh-collider="type: environment; convex: false"></a-entity>    
+   
+ <!--martini-->
+     
+ <a-entity position="-8.10 0.01 -5.70" scale="7 7 7" rotation="0 110 0" collada-model="#martini"n-mesh-collider="type: environment; convex: false"></a-entity>    
+  
+ <!--trash-->
+     
+ <a-entity position="-7 0.01 4.70" scale="7 7 7"  collada-model="#trash"n-mesh-collider="type: environment; convex: false"></a-entity>    
+  
+ <!--trash-->
+     
+ <a-entity position="-7.50 0.01 -6.60" scale="7 7 7"  collada-model="#trash"n-mesh-collider="type: environment; convex: false"></a-entity>    
  
 
  <!-- Textured plane parallel to ground. -->
@@ -79,9 +109,17 @@
   <a-entity n-object='res: effects/fire'position="-7.50 2.20 1.30"></a-entity>
   
   
-<!--Banner -->
+<!--Banner-->
 
 <a-image position="-8.60 9 -1" height="2"width="8" rotation="0 90 0"src="https://rawgit.com/Lia021/Montreal/master/sloan's%20dumpster%20Fire.png"></a-image>
+
+<!--slumber-->
+
+<a-image position="-6.30 4 -11.30" height="2"width="5" rotation="0 120 0"src="https://rawgit.com/Lia021/Montreal/master/coollogo_com-14564605.png"></a-image>
+
+<!--bank-->
+
+<a-image position="-6.58 4 9.50" height="2"width="5" rotation="0 60 0"src="https://rawgit.com/Lia021/Montreal/master/coollogo_com-24671408.png"></a-image>
 
 
  <!--inclser-->
