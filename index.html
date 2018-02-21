@@ -6,20 +6,67 @@
   <meta name="viewport" content="width=device-width">
   <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
   <script src="https://sdk.altvr.com/libs/altspace.js/2.7.4/altspace.min.js"></script>
-  <script>
-    altspace.getThreeJSTrackingSkeleton().then(function (skeleton) {
-          window.head = skeleton.getJoint('Head');
-        });
-        AFRAME.registerComponent('altspace-look-at', {
-          init: function () {
-            if (!window.altspace || !altspace.inClient) { return; }
-          },
-          tick: function () {
-            if (!window.head || !this.el.object3D) { return; }
-            this.el.object3D.lookAt(window.head.position); 
-          }
-        })
-  </script>
+	<script>
+				altspace.getThreeJSTrackingSkeleton().then(function(skeleton) {
+					window.head = skeleton.getJoint('Head');
+				});
+
+				AFRAME.registerComponent('altspace-look-at', {
+					init: function () {
+						if(!window.altspace || !altspace.inClient) return;
+					},
+					tick: function () {
+						if(!window.head || !this.el.object3D) return;
+						this.el.object3D.lookAt(window.head.position); 
+					}
+				});
+
+				AFRAME.registerComponent("restricted-zone", {
+					schema: {
+						userids: { type: "array" },
+						target: { type: "string" },
+						enabled: { type: "boolean", default: true }
+					},
+
+					init: function() {
+						var self = this;
+
+						altspace.getUser().then(function(user) {
+							altspace.getThreeJSTrackingSkeleton().then(function(skeleton) {
+								self.user = user;
+
+								self.el.sceneEl.object3D.add(skeleton);
+								self.avatar = skeleton.getJoint('Head');
+
+								self.portal = document.createElement('a-entity');
+								//self.portal.setAttribute('n-portal', 'targetEntity: #' + self.data.target);
+								//self.portal.setAttribute('visible', false);
+								self.el.sceneEl.appendChild(self.portal);
+
+								self.box = new THREE.Box3();
+							});
+
+						});
+					},
+
+					tick: function() {
+						var self = this;
+
+						if(self.box) {
+							self.box.setFromObject(self.el.object3D);
+							window.test = function() { console.log(self.box, self.el.object3D, self.avatar.position); }
+
+							var isWhitelistedUser = (!self.data.enabled || self.user.isModerator || (self.data.userids.length > 0 && self.data.userids.indexOf(self.user.userId) >= 0));
+							if(!isWhitelistedUser && self.avatar && self.box.containsPoint(self.avatar.position)) {
+								self.portal.setAttribute('n-portal', 'targetEntity: #' + self.data.target);
+								self.portal.setAttribute('position', self.avatar.position);
+							} else {
+								self.portal.removeAttribute('n-portal');
+							}
+						}
+					}
+				});
+		</script>
 
  
   <body>
@@ -178,6 +225,12 @@
  n-layout-browser="url:https://video-jukebox.firebaseapp.com/index.html?categoryUrl=https%3A%2F%2Faccount.altvr.com%2Fapi%2Fpublic%2Fusers%2F403147243432968910%2Fvideo_jukebox_category.json&room=; isEnclosure:true">
  </a-entity>
 
-
+<!--Stage Restrictions-->
+			<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
+			<a-box color="tomato" position="-6.7 0 -0.8" width="6" height="50" depth="8.6" material="transparent: true; opacity: 0.3" restricted-zone="userids: 403147243432968910, 482118208577339721; target: restricted-stage-respawn"></a-box>
+			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
+		</a-scene>
+	</body>
+</html>
 
 
