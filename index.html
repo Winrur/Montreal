@@ -89,6 +89,7 @@
   <a-asset-item id="pillow" src="https://rawgit.com/Lia021/Montreal/master/stage-s/pillow.dae"></a-asset-item>
   <a-asset-item id="glass" src="https://rawgit.com/Lia021/Montreal/master/stage-s/glass.dae"></a-asset-item>
   <a-asset-item id="smalltable" src="https://rawgit.com/Lia021/Montreal/master/stage-s/small%20table.dae"></a-asset-item>
+  <a-asset-item id="base" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/base.dae"></a-asset-item>
   
 
 
@@ -98,6 +99,10 @@
  <!--bleacher-->
      
  <a-entity position="0 0.1 0" scale="5 5 5"  collada-model="#bleacher"n-mesh-collider="type: environment; convex: false"></a-entity>    
+
+ <!--base-->
+     
+ <a-entity position="6.50 0.1 0" scale="5 5 5"  collada-model="#base"n-mesh-collider="type: environment; convex: false"></a-entity>    
 
  <!--garbage-->
      
@@ -209,7 +214,7 @@
   
 <!--Banner-->
 
-<a-image position="-6.94 1.10 1.72" height="1.10"width="2.40"side="double" rotation="0 110 0"src="https://rawgit.com/Lia021/Sloan-talk-show/master/camilla%20dee.jpg"></a-image>
+<a-box position="-6.94 1.10 1.72" depth="0.02"height="1.10"width="2.40"side="double" rotation="0 110 0"src="https://rawgit.com/Lia021/Sloan-talk-show/master/camilla%20dee.jpg"></a-box>
 
 <!--slumber-->
 
@@ -218,6 +223,7 @@
 <!--bank-->
 
 <a-image position="-5.96 4 7.80" height="2"width="5" rotation="0 80 0"src="https://rawgit.com/Lia021/Montreal/master/coollogo_com-24671408.png"></a-image>
+
 
 
  <!--inclser-->
@@ -229,6 +235,11 @@
  <!--Stage Restrictions-->
 			<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
 			<a-box color="tomato" position="-6.7 0 -0.8" width="6" height="50" depth="8.6" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
+			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
+		
+ <!--Stage Restrictions2-->
+			<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
+			<a-box color="black" position="9.50 0 0" width="10" height="50" depth="11" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
 			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
         
 				
