@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.79.0 commit date:2017-09-11, commit time:10:43, hash:5bd8ac9</authoring_tool>
+    </contributor>
+    <created>2018-02-22T03:46:57</created>
+    <modified>2018-02-22T03:46:57</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_cameras>
+    <camera id="Camera-camera" name="Camera">
+      <optics>
+        <technique_common>
+          <perspective>
+            <xfov sid="xfov">49.13434</xfov>
+            <aspect_ratio>1.777778</aspect_ratio>
+            <znear sid="znear">0.1</znear>
+            <zfar sid="zfar">100</zfar>
+          </perspective>
+        </technique_common>
+      </optics>
+      <extra>
+        <technique profile="blender">
+          <shiftx sid="shiftx" type="float">0</shiftx>
+          <shifty sid="shifty" type="float">0</shifty>
+          <YF_dofdist sid="YF_dofdist" type="float">0</YF_dofdist>
+        </technique>
+      </extra>
+    </camera>
+  </library_cameras>
+  <library_images>
+    <image id="cover" name="cover">
+      <init_from>cover.jpg</init_from>
+    </image>
+  </library_images>
+  <library_effects>
+    <effect id="Material_001-effect">
+      <profile_COMMON>
+        <newparam sid="cover-surface">
+          <surface type="2D">
+            <init_from>cover</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="cover-sampler">
+          <sampler2D>
+            <source>cover-surface</source>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="cover-sampler"/>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="Material_001-material" name="Material_001">
+      <instance_effect url="#Material_001-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Plane-mesh" name="Plane">
+      <mesh>
+        <source id="Plane-mesh-positions">
+          <float_array id="Plane-mesh-positions-array" count="24">0.5655864 -1 -0.0119192 2.061119 -1 -0.008078515 0.5655864 1 -0.0119192 2.061119 1 -0.008078515 0.5676479 1.523835 0.2588625 2.063314 1.523835 0.2802294 0.5675876 -1.387544 0.2509272 2.06312 -1.387544 0.2547678</float_array>
+          <technique_common>
+            <accessor source="#Plane-mesh-positions-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Plane-mesh-normals">
+          <float_array id="Plane-mesh-normals-array" count="15">-0.002568006 0 0.9999968 -0.002281248 -0.459191 0.8883347 -0.002125322 0.5613033 0.8276074 -0.01251482 -0.4820962 0.876029 -0.002125322 0.5613031 0.8276076</float_array>
+          <technique_common>
+            <accessor source="#Plane-mesh-normals-array" count="5" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Plane-mesh-map">
+          <float_array id="Plane-mesh-map-array" count="36">0.8861944 0.19686 0.1120517 0.7323019 0.1121668 0.1970542 0.8860792 0.7321076 0.1138052 0.8894705 0.1120517 0.7323019 0.8861944 0.19686 0.1139206 0.1098191 0.887948 0.1096248 0.8861944 0.19686 0.8860792 0.7321076 0.1120517 0.7323019 0.8860792 0.7321076 0.8879483 0.8903751 0.1138052 0.8894705 0.8861944 0.19686 0.1121668 0.1970542 0.1139206 0.1098191</float_array>
+          <technique_common>
+            <accessor source="#Plane-mesh-map-array" count="18" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Plane-mesh-vertices">
+          <input semantic="POSITION" source="#Plane-mesh-positions"/>
+        </vertices>
+        <triangles material="Material_001-material" count="6">
+          <input semantic="VERTEX" source="#Plane-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Plane-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Plane-mesh-map" offset="2" set="0"/>
+          <p>1 0 0 2 0 1 0 0 2 3 1 3 4 1 4 2 1 5 1 2 6 6 2 7 7 2 8 1 0 9 3 0 10 2 0 11 3 3 12 5 3 13 4 3 14 1 4 15 0 4 16 6 4 17</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Camera" name="Camera" type="NODE">
+        <matrix sid="transform">0.6859207 -0.3240135 0.6515582 7.481132 0.7276763 0.3054208 -0.6141704 -6.50764 0 0.8953956 0.4452714 5.343665 0 0 0 1</matrix>
+        <instance_camera url="#Camera-camera"/>
+      </node>
+      <node id="Plane" name="Plane" type="NODE">
+        <matrix sid="transform">-0.007613033 0 -0.999971 0 0 1 0 0 0.999971 0 -0.007613033 0 0 0 0 1</matrix>
+        <instance_geometry url="#Plane-mesh" name="Plane">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Material_001-material" target="#Material_001-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
