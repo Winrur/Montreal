@@ -159,15 +159,15 @@
 
  <!--pillow-->
      
- <a-entity position="-8.60 1.19 -6.70" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
+ <a-entity position="-8.60 1.16 -6.70" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
  
  <!--pillow2-->
      
- <a-entity position="-9.95 1.19 -6.50" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
+ <a-entity position="-9.95 1.16 -6.50" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
 
  <!--pillow3-->
      
- <a-entity position="-10.60 1.19 -10.80" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
+ <a-entity position="-10.60 1.16 -10.80" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
 
 
 
@@ -260,6 +260,11 @@
 
 <a-image position="0.50 1.80 -7.08" altspace-cursor-collider="enabled: false"height="1"width="0.70" rotation="0 0 0"src="https://rawgit.com/Lia021/Montreal/master/drink%20add.jpg"></a-image>
 
+<!--yunji-->
+
+<a-image position="-9 1.80 -12.21" altspace-cursor-collider="enabled: false"height="1"width="0.70" rotation="0 10 0"src="https://rawgit.com/Lia021/Montreal/master/yunji.jpg"></a-image>
+
+
 <!--message-->
 
 <a-image position="0 1.15 17.35" altspace-cursor-collider="enabled: false"height="0.70"width="0.70" rotation="-90 0 0"src="https://rawgit.com/Lia021/Montreal/master/message.jpg"></a-image>
@@ -318,6 +323,15 @@
 	<a-entity id="gear-m" sync="own-on: m" sync-n-sound n-sound="on: m; src:https://rawgit.com/Lia021/Sloan-talk-show/master/soundeffects/sloan.mp3;"></a-entity>
 	<a-box wire="on: click; emit: m; targets: #pc-m, #gear-m;" color="red"depth="0.2" height="0.2" width="0.2"opacity="1" rotation="0 0 0"></a-box>
    </a-entity>
+
+   <!--intro-->
+
+<a-entity position="5 7 0">
+	<a-entity id="pc-i" sync="own-on: i" sync-n-sound n-sound="on: i; src:https://rawgit.com/Lia021/Montreal/master/intromusic/My_-_Intro.ogg;"></a-entity>
+	<a-entity id="gear-i" sync="own-on: i" sync-n-sound n-sound="on: i; src:https://rawgit.com/Lia021/Montreal/master/intromusic/My%20-%20Intro.mp3;"></a-entity>
+	<a-box wire="on: click; emit: i; targets: #pc-i, #gear-i;" color="blue"depth="0.2" height="0.2" width="0.2"opacity="1" rotation="0 0 0"></a-box>
+   </a-entity>
+
 
     <!--treanbone-->
 
