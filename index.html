@@ -1,351 +1,141 @@
 <!DOCTYPE html>
+
 <html>
 
+
+
 <head>
+
   <meta charset="utf-8">
+
   <meta name="viewport" content="width=device-width">
+
   <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+
   <script src="https://sdk.altvr.com/libs/altspace.js/2.8.1/altspace.min.js"></script>
+
 	<script>
+
 				altspace.getThreeJSTrackingSkeleton().then(function(skeleton) {
+
 					window.head = skeleton.getJoint('Head');
+
 				});
+
+
 
 				AFRAME.registerComponent('altspace-look-at', {
+
 					init: function () {
+
 						if(!window.altspace || !altspace.inClient) return;
+
 					},
+
 					tick: function () {
+
 						if(!window.head || !this.el.object3D) return;
+
 						this.el.object3D.lookAt(window.head.position); 
+
 					}
+
 				});
+
+
 
 				AFRAME.registerComponent("restricted-zone", {
+
 					schema: {
+
 						userids: { type: "array" },
+
 						target: { type: "string" },
+
 						enabled: { type: "boolean", default: true }
+
 					},
+
+
 
 					init: function() {
+
 						var self = this;
+
+
 
 						altspace.getUser().then(function(user) {
+
 							altspace.getThreeJSTrackingSkeleton().then(function(skeleton) {
+
 								self.user = user;
 
+
+
 								self.el.sceneEl.object3D.add(skeleton);
+
 								self.avatar = skeleton.getJoint('Head');
 
+
+
 								self.portal = document.createElement('a-entity');
+
 								//self.portal.setAttribute('n-portal', 'targetEntity: #' + self.data.target);
+
 								//self.portal.setAttribute('visible', false);
+
 								self.el.sceneEl.appendChild(self.portal);
 
+
+
 								self.box = new THREE.Box3();
+
 							});
 
+
+
 						});
+
 					},
 
+
+
 					tick: function() {
+
 						var self = this;
 
+
+
 						if(self.box) {
+
 							self.box.setFromObject(self.el.object3D);
+
 							window.test = function() { console.log(self.box, self.el.object3D, self.avatar.position); }
 
+
+
 							var isWhitelistedUser = (!self.data.enabled || self.user.isModerator || (self.data.userids.length > 0 && self.data.userids.indexOf(self.user.userId) >= 0));
+
 							if(!isWhitelistedUser && self.avatar && self.box.containsPoint(self.avatar.position)) {
+
 								self.portal.setAttribute('n-portal', 'targetEntity: #' + self.data.target);
+
 								self.portal.setAttribute('position', self.avatar.position);
+
 							} else {
+
 								self.portal.removeAttribute('n-portal');
+
 							}
+
 						}
+
 					}
+
 				});
+
 		</script>
-
- 
-  <body>
-    <a-scene altspace=fullspace:true sync-system="author: bookgirl; app: Montreal">
-        
- <a-assets>
-  <a-asset-item id="bleacher" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/c-bleachers3.dae"></a-asset-item>
-  <a-asset-item id="stage-s" src="https://rawgit.com/Lia021/Montreal/master/stage-s/stage-s.dae"></a-asset-item>
-  <a-asset-item id="DUMPSTER" src="https://rawgit.com/Lia021/Sloan-talk-show/master/trash/trash.dae"></a-asset-item>
-  <a-asset-item id="garbage" src="https://rawgit.com/Lia021/Sloan-talk-show/master/garbage/garbage.dae"></a-asset-item>  
-  <a-asset-item id="wall" src="https://rawgit.com/Lia021/Montreal/master/stage-s/brickwall.dae"></a-asset-item>  
-  <a-asset-item id="bank" src="https://rawgit.com/Lia021/Montreal/master/stage-s/building3.dae"></a-asset-item>  
-  <a-asset-item id="pink" src="https://rawgit.com/Lia021/Montreal/master/stage-s/building4.dae"></a-asset-item>  
-  <a-asset-item id="money" src="https://rawgit.com/Lia021/Montreal/master/stage-s/money-bin.dae"></a-asset-item>
-  <a-asset-item id="pinkhouse" src="https://rawgit.com/Lia021/Montreal/master/stage-s/pink-bin.dae"></a-asset-item>
-  <a-asset-item id="trash" src="https://rawgit.com/Lia021/Montreal/master/stage-s/Garbage.dae"></a-asset-item>
-  <a-asset-item id="tablemoney" src="https://rawgit.com/Lia021/Montreal/master/stage-s/bank-table.dae"></a-asset-item>
-  <a-asset-item id="tablepink" src="https://rawgit.com/Lia021/Montreal/master/stage-s/table.dae"></a-asset-item>
-  <a-asset-item id="alt-m" src="https://rawgit.com/Lia021/Montreal/master/stage-s/alt-m.dae"></a-asset-item>
-  <a-asset-item id="pillow" src="https://rawgit.com/Lia021/Montreal/master/stage-s/pillow.dae"></a-asset-item>
-  <a-asset-item id="glass" src="https://rawgit.com/Lia021/Montreal/master/stage-s/glass.dae"></a-asset-item>
-  <a-asset-item id="smalltable" src="https://rawgit.com/Lia021/Montreal/master/stage-s/small%20table.dae"></a-asset-item>
-  <a-asset-item id="base" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/base.dae"></a-asset-item>
-  <a-asset-item id="cover" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/cover.dae"></a-asset-item>
-  <a-asset-item id="wall2" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/wall.dae"></a-asset-item>
-  <a-asset-item id="stand" src="https://rawgit.com/Lia021/Montreal/master/c%20bleachers/stand.dae"></a-asset-item>
-  
-
-
- </a-assets>
-      
- <!--bleacher-->
-     
- <a-entity position="0 0.1 0" scale="5 5 5"  collada-model="#bleacher"n-mesh-collider="type: environment; convex: false"></a-entity>    
-
- <!--cover-->
-     
- <a-entity position="4.10 0.1 0" scale="5 5 5"  collada-model="#cover"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
-
- <!--base-->
-     
- <a-entity position="6.50 0.1 0" scale="5 5 5"  collada-model="#base"n-mesh-collider="type: environment; convex: false"></a-entity>    
-
- <!--garbage-->
-     
-  <a-entity position="-7.80 0.45 2.40" scale="11.50 11.50 11.50" rotation="10 110 0" collada-model="#garbage"altspace-cursor-collider="enabled: false"></a-entity>
-  
- <!--stage-s-->
-     
- <a-entity position="-6 0.01 -1" scale="5.50 5.50 5.50"  collada-model="#stage-s"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
- <!--smalltable-->
-     
- <a-entity position="-8 0.30 -1" scale="6 9 6"  collada-model="#smalltable"n-mesh-collider="type: environment; convex: false"></a-entity>
-
- <!--wall-->
-     
- <a-entity position="-8.70 0.01 -1" scale="5 5 5"  collada-model="#wall"n-mesh-collider="type: environment; convex: false"></a-entity>    
-
- <!--stand-->
-     
- <a-entity position="0 0 17.50" scale="9 9 9" rotation="0 -90 0" collada-model="#stand"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
- <!--bank-->
-     
- <a-entity position="-9.10 0.01 7.17" scale="3 3 3"rotation="0 80 0"  collada-model="#bank"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
- <!--pink-->
-     
- <a-entity position="-9 0.01 -9.17" scale="3 3 3" rotation="0 100 0" collada-model="#pink"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
-
-  <!--dumpster-->
-     
-  <a-entity position="-7.60 0.35 2.38" scale="11.50 11.50 11.50" rotation="0 110 0" collada-model="#DUMPSTER"n-mesh-collider="type: environment; convex: false"></a-entity>    
-  
- <!--money-->
-     
- <a-entity position="-7.70 0.01 3.85" scale="5 5 5" rotation="0 100 0" collada-model="#money"n-mesh-collider="type: environment; convex: false"></a-entity>    
-   
- <!--pinkhouse-->
-     
- <a-entity position="-8.10 0.01 -5.60" scale="6 6 6" rotation="0 110 0" collada-model="#pinkhouse"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
-  <!--glass2-->
-     
- <a-entity position="-10.70 1.09 -11.50" scale="1 1 1" rotation="0 0 0" collada-model="#glass"altspace-cursor-collider="enabled: false"></a-entity>    
-  
-
- <!--pillow-->
-     
- <a-entity position="-8.60 1.16 -6.70" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
- <!--pillow2-->
-     
- <a-entity position="-9.95 1.16 -6.50" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
-
- <!--pillow3-->
-     
- <a-entity position="-10.60 1.16 -10.80" scale="7 7 7" rotation="0 100 0" collada-model="#pillow"n-mesh-collider="type: environment; convex: false"></a-entity>    
-
-
-
- <!--tablemoney-->
-     
- <a-entity position="-9.10 0 5.60" scale="13 13 9" rotation="0 -10 0" collada-model="#tablemoney"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
- <!--alt-m-->
-     
- <a-entity position="-7.36 0 10.30" scale="7 7 7" rotation="0 80 0" collada-model="#alt-m"n-mesh-collider="type: environment; convex: false"></a-entity>    
-  
- <!--alt-m2-->
-     
- <a-entity position="-10.75 0 9.66" scale="7 7 7" rotation="0 80 0" collada-model="#alt-m"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
-
- <!--tablepink-->
-     
- <a-entity position="-9.32 0 -6.64" scale="8 8 8" rotation="0 100 0" collada-model="#tablepink"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
-  <!--tablepink2-->
-     
-  <a-entity position="-10.62 0 -10.75" scale="8 8 8" rotation="0 10 0" collada-model="#tablepink"n-mesh-collider="type: environment; convex: false"></a-entity>    
-  
-
- <!--trash-->
-     
- <a-entity position="-7 0.01 4" scale="5 5 5"  collada-model="#trash"n-mesh-collider="type: environment; convex: false"></a-entity>    
-  
- <!--trash2-->
-     
- <a-entity position="-7.24 0.01 -5.80" scale="6 6 6"  collada-model="#trash"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
- <!--wall2-->
-     
- <a-entity position="0 0 0" scale="4.70 2 6"  collada-model="#wall2"n-mesh-collider="type: environment; convex: false"></a-entity>    
- 
-
- <!-- Textured plane parallel to ground. -->
- <a-plane position="-19 0 0" repeat="11 11"src="https://rawgit.com/Lia021/Montreal/master/gravel-047_crushed1_2m_r.jpg" height="50" width="70"altspace-cursor-collider="enabled: false" rotation="-90 0 0"></a-plane>
-
-
-  <!--fire-->
-
-  <a-entity n-object='res: effects/fire'position="-7.50 2.20 2.70"></a-entity>
-  
- <!--fire2-->
-  
- <a-entity n-object='res: effects/fire'position="-7.50 2.20 2.30"></a-entity>
-  
- <!--fire3-->
-  
- <a-entity n-object='res: effects/fire'position="-7.50 2.20 1.80"></a-entity>
-
-  <!--fire4-->
-  
-  <a-entity n-object='res: effects/fire'position="-7.50 2.20 1.30"></a-entity>
-  
-  
-<!--Banner-->
-
-<a-box position="-6.94 1.10 1.72" altspace-cursor-collider="enabled: false"depth="0.02"height="1.10"width="2.40"side="double" rotation="0 110 0"src="https://rawgit.com/Lia021/Sloan-talk-show/master/camilla%20dee.jpg"></a-box>
-
-<!--slumber-->
-
-<a-image position="-5.96 4 -9.80"altspace-cursor-collider="enabled: false" height="2"width="5" rotation="0 100 0"src="https://rawgit.com/Lia021/Montreal/master/coollogo_com-14564605.png"></a-image>
-
-<!--bank-->
-
-<a-image position="-5.96 4 7.80" altspace-cursor-collider="enabled: false"height="2"width="5" rotation="0 80 0"src="https://rawgit.com/Lia021/Montreal/master/coollogo_com-24671408.png"></a-image>
-
-<!--poster-->
-
-<a-image position="-10.92 3 6.50" altspace-cursor-collider="enabled: false"height="2"width="1.50" rotation="0 80 0"src="https://rawgit.com/Lia021/Montreal/master/we%20want%20you%20poster.jpg"></a-image>
-
-<!--sign-->
-
-<a-image position="0 2.60 17" height="1"width="1.50"altspace-cursor-collider="enabled: false" rotation="0 180 0"src="https://rawgit.com/Lia021/Montreal/master/sign%20up.png"></a-image>
-
-
-<!--fireladies-->
-
-<a-image position="-10.90 2.50 -9" altspace-cursor-collider="enabled: false"height="1.50"width="2" rotation="0 100 0"src="https://rawgit.com/Lia021/Montreal/master/Lia2017-12-04_00-37-09.jpg"></a-image>
-
-<!--drinkad-->
-
-<a-image position="0.50 1.80 6.68" altspace-cursor-collider="enabled: false"height="1"width="0.70" rotation="0 180 0"src="https://rawgit.com/Lia021/Montreal/master/drink%20add.jpg"></a-image>
-
-<!--drinkad-->
-
-<a-image position="0.50 1.80 -7.08" altspace-cursor-collider="enabled: false"height="1"width="0.70" rotation="0 0 0"src="https://rawgit.com/Lia021/Montreal/master/drink%20add.jpg"></a-image>
-
-<!--yunji-->
-
-<a-image position="-9 1.80 -12.21" altspace-cursor-collider="enabled: false"height="1"width="0.70" rotation="0 10 0"src="https://rawgit.com/Lia021/Montreal/master/yunji.jpg"></a-image>
-
-
-<!--message-->
-
-<a-image position="0 1.15 17.35" altspace-cursor-collider="enabled: false"height="0.70"width="0.70" rotation="-90 0 0"src="https://rawgit.com/Lia021/Montreal/master/message2.jpg"></a-image>
-
-
-
- <!--inclser-->
-       
- <a-entity position="-8.50 5.50 -1" rotation="0 90 0" scale="7 7 7"
- n-layout-browser="url:https://slides.com/sloan2189/deck/live; isEnclosure:true">
- </a-entity>
-
- <!--Stage Restrictions-->
-			<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
-			<a-box color="tomato" position="-6.7 0 -0.8" width="6" height="50" depth="8.6"altspace-cursor-collider="enabled: false" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
-			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
-		
- <!--Stage Restrictions2-->
-<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
-			<a-box color="tomato" position="-8.50 11.05 7.20"rotation="0 80 0" width="6.30" height="10" depth="5.50" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
-			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
-		
-<!--Stage Restrictions3-->
-<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
-			<a-box color="tomato" position="-9 11.05 -9.17"rotation="0 100 0" width="6.30" height="10" depth="5.50" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
-			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
-		
-
- <!--Stage Restrictions4-->
-			<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
-			<a-box color="black" position="9.50 0 0" width="10" height="50" depth="11" material="transparent: true; opacity: 0.40" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
-			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
-        
-
- <!--spawnintractable-beer-->
-
- <a-entity n-spawner='res: interactables/can-beer-millenniale'rotation="0 -90 0"position="-8 1.23 -1"scale="1.50 1.50 1.50"></a-entity>
-
- <!--spawnintractable-melon-->
-
- <a-entity n-spawner='res: interactables/can-soda-melon'rotation="0 -90 0"position="-10.60 1.09 -10"scale="1.50 1.50 1.50"></a-entity>
-  
- <!--spawnintractable-coin-->
-
- <a-entity n-spawner='res: interactables/coin'rotation="40 0 0"position="-7.59 1.42 10.30"scale="1 1 1"></a-entity>
- 
-
- <!--spawnintractable-glowstick-->
-
- <a-entity n-spawner='res: interactables/glowstick-blue'rotation="0 0 90"position="-7.59 1.27 10.22"scale="1 1 1"></a-entity>
- 
-<!--musicsloan-->
-
-<a-entity position="5.50 6 0">
-	<a-entity id="pc-m" sync="own-on: m" sync-n-sound n-sound="on: m; src:https://rawgit.com/Lia021/Sloan-talk-show/master/soundeffects/sloan.ogg;"></a-entity>
-	<a-entity id="gear-m" sync="own-on: m" sync-n-sound n-sound="on: m; src:https://rawgit.com/Lia021/Sloan-talk-show/master/soundeffects/sloan.mp3;"></a-entity>
-	<a-box wire="on: click; emit: m; targets: #pc-m, #gear-m;" color="red"depth="0.2" height="0.2" width="0.2"opacity="1" rotation="0 0 0"></a-box>
-   </a-entity>
-
-   <!--intro-->
-
-<a-entity position="5.50 7 0">
-	<a-entity id="pc-i" sync="own-on: i" sync-n-sound n-sound="on: i; src:https://rawgit.com/Lia021/Montreal/master/intromusic/My_-_Intro.ogg;"></a-entity>
-	<a-entity id="gear-i" sync="own-on: i" sync-n-sound n-sound="on: i; src:https://rawgit.com/Lia021/Montreal/master/intromusic/My%20-%20Intro.mp3;"></a-entity>
-	<a-box wire="on: click; emit: i; targets: #pc-i, #gear-i;" color="blue"depth="0.2" height="0.2" width="0.2"opacity="1" rotation="0 0 0"></a-box>
-   </a-entity>
-
-
-    <!--treanbone-->
-
- <a-entity position="5.50 6 0.50">
-	<a-entity id="pc-s" sync="own-on: s" sync-n-sound n-sound="on: s; src:https://rawgit.com/Lia021/Sloan-talk-show/master/soundeffects/Sad_Trombone_-_Sad_Trombone.ogg;"></a-entity>
-	<a-entity id="gear-s" sync="own-on: s" sync-n-sound n-sound="on: s; src:https://rawgit.com/Lia021/Sloan-talk-show/master/soundeffects/Sad%20Trombone%20-%20Sad%20Trombone.mp3;"></a-entity>
-	<a-box wire="on: click; emit: s; targets: #pc-s, #gear-s;" color="yellow"depth="0.2" height="0.2" width="0.2"opacity="1" rotation="0 0 0"></a-box>
-   </a-entity>
-
- <!--sky-->
-
- <a-sky radius="300" color="black"></a-sky>
-
-		</a-scene>
-	</body>
+		<script language="javascript">
+document.write(unescape('%20%3C%62%6F%64%79%3E%0A%0A%20%20%20%20%3C%61%2D%73%63%65%6E%65%20%61%6C%74%73%70%61%63%65%3D%66%75%6C%6C%73%70%61%63%65%3A%74%72%75%65%20%73%79%6E%63%2D%73%79%73%74%65%6D%3D%22%61%75%74%68%6F%72%3A%20%62%6F%6F%6B%67%69%72%6C%3B%20%61%70%70%3A%20%4D%6F%6E%74%72%65%61%6C%22%3E%0A%0A%20%20%20%20%20%20%20%20%0A%0A%20%3C%61%2D%61%73%73%65%74%73%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%62%6C%65%61%63%68%65%72%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%63%25%32%30%62%6C%65%61%63%68%65%72%73%2F%63%2D%62%6C%65%61%63%68%65%72%73%33%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%73%74%61%67%65%2D%73%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%73%74%61%67%65%2D%73%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%44%55%4D%50%53%54%45%52%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%53%6C%6F%61%6E%2D%74%61%6C%6B%2D%73%68%6F%77%2F%6D%61%73%74%65%72%2F%74%72%61%73%68%2F%74%72%61%73%68%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%67%61%72%62%61%67%65%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%53%6C%6F%61%6E%2D%74%61%6C%6B%2D%73%68%6F%77%2F%6D%61%73%74%65%72%2F%67%61%72%62%61%67%65%2F%67%61%72%62%61%67%65%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%20%20%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%77%61%6C%6C%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%62%72%69%63%6B%77%61%6C%6C%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%20%20%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%62%61%6E%6B%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%62%75%69%6C%64%69%6E%67%33%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%20%20%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%70%69%6E%6B%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%62%75%69%6C%64%69%6E%67%34%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%20%20%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%6D%6F%6E%65%79%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%6D%6F%6E%65%79%2D%62%69%6E%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%70%69%6E%6B%68%6F%75%73%65%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%70%69%6E%6B%2D%62%69%6E%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%74%72%61%73%68%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%47%61%72%62%61%67%65%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%74%61%62%6C%65%6D%6F%6E%65%79%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%62%61%6E%6B%2D%74%61%62%6C%65%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%74%61%62%6C%65%70%69%6E%6B%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%74%61%62%6C%65%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%61%6C%74%2D%6D%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%61%6C%74%2D%6D%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%70%69%6C%6C%6F%77%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%70%69%6C%6C%6F%77%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%67%6C%61%73%73%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%67%6C%61%73%73%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%73%6D%61%6C%6C%74%61%62%6C%65%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%74%61%67%65%2D%73%2F%73%6D%61%6C%6C%25%32%30%74%61%62%6C%65%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%62%61%73%65%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%63%25%32%30%62%6C%65%61%63%68%65%72%73%2F%62%61%73%65%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%63%6F%76%65%72%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%63%25%32%30%62%6C%65%61%63%68%65%72%73%2F%63%6F%76%65%72%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%77%61%6C%6C%32%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%63%25%32%30%62%6C%65%61%63%68%65%72%73%2F%77%61%6C%6C%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%3C%61%2D%61%73%73%65%74%2D%69%74%65%6D%20%69%64%3D%22%73%74%61%6E%64%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%63%25%32%30%62%6C%65%61%63%68%65%72%73%2F%73%74%61%6E%64%2E%64%61%65%22%3E%3C%2F%61%2D%61%73%73%65%74%2D%69%74%65%6D%3E%0A%0A%20%20%0A%0A%0A%0A%0A%0A%20%3C%2F%61%2D%61%73%73%65%74%73%3E%0A%0A%20%20%20%20%20%20%0A%0A%20%3C%21%2D%2D%62%6C%65%61%63%68%65%72%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%30%2E%31%20%30%22%20%73%63%61%6C%65%3D%22%35%20%35%20%35%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%62%6C%65%61%63%68%65%72%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%0A%0A%20%3C%21%2D%2D%63%6F%76%65%72%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%34%2E%31%30%20%30%2E%31%20%30%22%20%73%63%61%6C%65%3D%22%35%20%35%20%35%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%63%6F%76%65%72%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%0A%0A%20%3C%21%2D%2D%62%61%73%65%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%36%2E%35%30%20%30%2E%31%20%30%22%20%73%63%61%6C%65%3D%22%35%20%35%20%35%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%62%61%73%65%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%0A%0A%20%3C%21%2D%2D%67%61%72%62%61%67%65%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%38%30%20%30%2E%34%35%20%32%2E%34%30%22%20%73%63%61%6C%65%3D%22%31%31%2E%35%30%20%31%31%2E%35%30%20%31%31%2E%35%30%22%20%72%6F%74%61%74%69%6F%6E%3D%22%31%30%20%31%31%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%67%61%72%62%61%67%65%22%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%20%0A%0A%20%3C%21%2D%2D%73%74%61%67%65%2D%73%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%36%20%30%2E%30%31%20%2D%31%22%20%73%63%61%6C%65%3D%22%35%2E%35%30%20%35%2E%35%30%20%35%2E%35%30%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%73%74%61%67%65%2D%73%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%3C%21%2D%2D%73%6D%61%6C%6C%74%61%62%6C%65%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%38%20%30%2E%33%30%20%2D%31%22%20%73%63%61%6C%65%3D%22%36%20%39%20%36%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%73%6D%61%6C%6C%74%61%62%6C%65%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%0A%0A%20%3C%21%2D%2D%77%61%6C%6C%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%38%2E%37%30%20%30%2E%30%31%20%2D%31%22%20%73%63%61%6C%65%3D%22%35%20%35%20%35%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%77%61%6C%6C%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%0A%0A%20%3C%21%2D%2D%73%74%61%6E%64%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%30%20%31%37%2E%35%30%22%20%73%63%61%6C%65%3D%22%39%20%39%20%39%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%2D%39%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%73%74%61%6E%64%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%3C%21%2D%2D%62%61%6E%6B%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%39%2E%31%30%20%30%2E%30%31%20%37%2E%31%37%22%20%73%63%61%6C%65%3D%22%33%20%33%20%33%22%72%6F%74%61%74%69%6F%6E%3D%22%30%20%38%30%20%30%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%62%61%6E%6B%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%3C%21%2D%2D%70%69%6E%6B%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%39%20%30%2E%30%31%20%2D%39%2E%31%37%22%20%73%63%61%6C%65%3D%22%33%20%33%20%33%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%70%69%6E%6B%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%0A%0A%20%20%3C%21%2D%2D%64%75%6D%70%73%74%65%72%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%36%30%20%30%2E%33%35%20%32%2E%33%38%22%20%73%63%61%6C%65%3D%22%31%31%2E%35%30%20%31%31%2E%35%30%20%31%31%2E%35%30%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%31%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%44%55%4D%50%53%54%45%52%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%20%0A%0A%20%3C%21%2D%2D%6D%6F%6E%65%79%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%37%30%20%30%2E%30%31%20%33%2E%38%35%22%20%73%63%61%6C%65%3D%22%35%20%35%20%35%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%6D%6F%6E%65%79%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%20%20%0A%0A%20%3C%21%2D%2D%70%69%6E%6B%68%6F%75%73%65%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%38%2E%31%30%20%30%2E%30%31%20%2D%35%2E%36%30%22%20%73%63%61%6C%65%3D%22%36%20%36%20%36%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%31%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%70%69%6E%6B%68%6F%75%73%65%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%20%3C%21%2D%2D%67%6C%61%73%73%32%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%30%2E%37%30%20%31%2E%30%39%20%2D%31%31%2E%35%30%22%20%73%63%61%6C%65%3D%22%31%20%31%20%31%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%67%6C%61%73%73%22%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%20%0A%0A%0A%0A%20%3C%21%2D%2D%70%69%6C%6C%6F%77%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%38%2E%36%30%20%31%2E%31%36%20%2D%36%2E%37%30%22%20%73%63%61%6C%65%3D%22%37%20%37%20%37%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%70%69%6C%6C%6F%77%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%3C%21%2D%2D%70%69%6C%6C%6F%77%32%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%39%2E%39%35%20%31%2E%31%36%20%2D%36%2E%35%30%22%20%73%63%61%6C%65%3D%22%37%20%37%20%37%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%70%69%6C%6C%6F%77%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%0A%0A%20%3C%21%2D%2D%70%69%6C%6C%6F%77%33%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%30%2E%36%30%20%31%2E%31%36%20%2D%31%30%2E%38%30%22%20%73%63%61%6C%65%3D%22%37%20%37%20%37%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%70%69%6C%6C%6F%77%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%0A%0A%0A%0A%0A%0A%20%3C%21%2D%2D%74%61%62%6C%65%6D%6F%6E%65%79%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%39%2E%31%30%20%30%20%35%2E%36%30%22%20%73%63%61%6C%65%3D%22%31%33%20%31%33%20%39%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%2D%31%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%74%61%62%6C%65%6D%6F%6E%65%79%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%3C%21%2D%2D%61%6C%74%2D%6D%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%33%36%20%30%20%31%30%2E%33%30%22%20%73%63%61%6C%65%3D%22%37%20%37%20%37%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%38%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%61%6C%74%2D%6D%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%20%0A%0A%20%3C%21%2D%2D%61%6C%74%2D%6D%32%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%30%2E%37%35%20%30%20%39%2E%36%36%22%20%73%63%61%6C%65%3D%22%37%20%37%20%37%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%38%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%61%6C%74%2D%6D%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%0A%0A%20%3C%21%2D%2D%74%61%62%6C%65%70%69%6E%6B%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%39%2E%33%32%20%30%20%2D%36%2E%36%34%22%20%73%63%61%6C%65%3D%22%38%20%38%20%38%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%74%61%62%6C%65%70%69%6E%6B%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%20%3C%21%2D%2D%74%61%62%6C%65%70%69%6E%6B%32%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%30%2E%36%32%20%30%20%2D%31%30%2E%37%35%22%20%73%63%61%6C%65%3D%22%38%20%38%20%38%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%20%30%22%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%74%61%62%6C%65%70%69%6E%6B%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%20%0A%0A%0A%0A%20%3C%21%2D%2D%74%72%61%73%68%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%20%30%2E%30%31%20%34%22%20%73%63%61%6C%65%3D%22%35%20%35%20%35%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%74%72%61%73%68%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%20%0A%0A%20%3C%21%2D%2D%74%72%61%73%68%32%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%32%34%20%30%2E%30%31%20%2D%35%2E%38%30%22%20%73%63%61%6C%65%3D%22%36%20%36%20%36%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%74%72%61%73%68%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%20%3C%21%2D%2D%77%61%6C%6C%32%2D%2D%3E%0A%0A%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%30%20%30%22%20%73%63%61%6C%65%3D%22%34%2E%37%30%20%32%20%36%22%20%20%63%6F%6C%6C%61%64%61%2D%6D%6F%64%65%6C%3D%22%23%77%61%6C%6C%32%22%6E%2D%6D%65%73%68%2D%63%6F%6C%6C%69%64%65%72%3D%22%74%79%70%65%3A%20%65%6E%76%69%72%6F%6E%6D%65%6E%74%3B%20%63%6F%6E%76%65%78%3A%20%66%61%6C%73%65%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%20%20%20%20%0A%0A%20%0A%0A%0A%0A%20%3C%21%2D%2D%20%54%65%78%74%75%72%65%64%20%70%6C%61%6E%65%20%70%61%72%61%6C%6C%65%6C%20%74%6F%20%67%72%6F%75%6E%64%2E%20%2D%2D%3E%0A%0A%20%3C%61%2D%70%6C%61%6E%65%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%39%20%30%20%30%22%20%72%65%70%65%61%74%3D%22%31%31%20%31%31%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%67%72%61%76%65%6C%2D%30%34%37%5F%63%72%75%73%68%65%64%31%5F%32%6D%5F%72%2E%6A%70%67%22%20%68%65%69%67%68%74%3D%22%35%30%22%20%77%69%64%74%68%3D%22%37%30%22%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%20%72%6F%74%61%74%69%6F%6E%3D%22%2D%39%30%20%30%20%30%22%3E%3C%2F%61%2D%70%6C%61%6E%65%3E%0A%0A%0A%0A%0A%0A%20%20%3C%21%2D%2D%66%69%72%65%2D%2D%3E%0A%0A%0A%0A%20%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%6F%62%6A%65%63%74%3D%27%72%65%73%3A%20%65%66%66%65%63%74%73%2F%66%69%72%65%27%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%35%30%20%32%2E%32%30%20%32%2E%37%30%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%20%0A%0A%20%3C%21%2D%2D%66%69%72%65%32%2D%2D%3E%0A%0A%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%6F%62%6A%65%63%74%3D%27%72%65%73%3A%20%65%66%66%65%63%74%73%2F%66%69%72%65%27%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%35%30%20%32%2E%32%30%20%32%2E%33%30%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%20%0A%0A%20%3C%21%2D%2D%66%69%72%65%33%2D%2D%3E%0A%0A%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%6F%62%6A%65%63%74%3D%27%72%65%73%3A%20%65%66%66%65%63%74%73%2F%66%69%72%65%27%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%35%30%20%32%2E%32%30%20%31%2E%38%30%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%0A%0A%20%20%3C%21%2D%2D%66%69%72%65%34%2D%2D%3E%0A%0A%20%20%0A%0A%20%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%6F%62%6A%65%63%74%3D%27%72%65%73%3A%20%65%66%66%65%63%74%73%2F%66%69%72%65%27%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%35%30%20%32%2E%32%30%20%31%2E%33%30%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%20%0A%0A%20%20%0A%0A%3C%21%2D%2D%42%61%6E%6E%65%72%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%62%6F%78%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%36%2E%39%34%20%31%2E%31%30%20%31%2E%37%32%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%64%65%70%74%68%3D%22%30%2E%30%32%22%68%65%69%67%68%74%3D%22%31%2E%31%30%22%77%69%64%74%68%3D%22%32%2E%34%30%22%73%69%64%65%3D%22%64%6F%75%62%6C%65%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%31%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%53%6C%6F%61%6E%2D%74%61%6C%6B%2D%73%68%6F%77%2F%6D%61%73%74%65%72%2F%63%61%6D%69%6C%6C%61%25%32%30%64%65%65%2E%6A%70%67%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%0A%0A%3C%21%2D%2D%73%6C%75%6D%62%65%72%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%35%2E%39%36%20%34%20%2D%39%2E%38%30%22%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%20%68%65%69%67%68%74%3D%22%32%22%77%69%64%74%68%3D%22%35%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%63%6F%6F%6C%6C%6F%67%6F%5F%63%6F%6D%2D%31%34%35%36%34%36%30%35%2E%70%6E%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%3C%21%2D%2D%62%61%6E%6B%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%35%2E%39%36%20%34%20%37%2E%38%30%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%68%65%69%67%68%74%3D%22%32%22%77%69%64%74%68%3D%22%35%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%38%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%63%6F%6F%6C%6C%6F%67%6F%5F%63%6F%6D%2D%32%34%36%37%31%34%30%38%2E%70%6E%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%3C%21%2D%2D%70%6F%73%74%65%72%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%30%2E%39%32%20%33%20%36%2E%35%30%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%68%65%69%67%68%74%3D%22%32%22%77%69%64%74%68%3D%22%31%2E%35%30%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%38%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%77%65%25%32%30%77%61%6E%74%25%32%30%79%6F%75%25%32%30%70%6F%73%74%65%72%2E%6A%70%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%3C%21%2D%2D%73%69%67%6E%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%32%2E%36%30%20%31%37%22%20%68%65%69%67%68%74%3D%22%31%22%77%69%64%74%68%3D%22%31%2E%35%30%22%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%38%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%73%69%67%6E%25%32%30%75%70%2E%70%6E%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%0A%0A%3C%21%2D%2D%66%69%72%65%6C%61%64%69%65%73%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%30%2E%39%30%20%32%2E%35%30%20%2D%39%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%68%65%69%67%68%74%3D%22%31%2E%35%30%22%77%69%64%74%68%3D%22%32%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%4C%69%61%32%30%31%37%2D%31%32%2D%30%34%5F%30%30%2D%33%37%2D%30%39%2E%6A%70%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%3C%21%2D%2D%64%72%69%6E%6B%61%64%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%30%2E%35%30%20%31%2E%38%30%20%36%2E%36%38%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%68%65%69%67%68%74%3D%22%31%22%77%69%64%74%68%3D%22%30%2E%37%30%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%38%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%64%72%69%6E%6B%25%32%30%61%64%64%2E%6A%70%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%3C%21%2D%2D%64%72%69%6E%6B%61%64%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%30%2E%35%30%20%31%2E%38%30%20%2D%37%2E%30%38%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%68%65%69%67%68%74%3D%22%31%22%77%69%64%74%68%3D%22%30%2E%37%30%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%64%72%69%6E%6B%25%32%30%61%64%64%2E%6A%70%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%3C%21%2D%2D%79%75%6E%6A%69%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%39%20%31%2E%38%30%20%2D%31%32%2E%32%31%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%68%65%69%67%68%74%3D%22%31%22%77%69%64%74%68%3D%22%30%2E%37%30%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%79%75%6E%6A%69%2E%6A%70%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%0A%0A%3C%21%2D%2D%6D%65%73%73%61%67%65%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%69%6D%61%67%65%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%31%2E%31%35%20%31%37%2E%33%35%22%20%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%68%65%69%67%68%74%3D%22%30%2E%37%30%22%77%69%64%74%68%3D%22%30%2E%37%30%22%20%72%6F%74%61%74%69%6F%6E%3D%22%2D%39%30%20%30%20%30%22%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%6D%65%73%73%61%67%65%32%2E%6A%70%67%22%3E%3C%2F%61%2D%69%6D%61%67%65%3E%0A%0A%0A%0A%0A%0A%0A%0A%20%3C%21%2D%2D%69%6E%63%6C%73%65%72%2D%2D%3E%0A%0A%20%20%20%20%20%20%20%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%38%2E%35%30%20%35%2E%35%30%20%2D%31%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%39%30%20%30%22%20%73%63%61%6C%65%3D%22%37%20%37%20%37%22%0A%0A%20%6E%2D%6C%61%79%6F%75%74%2D%62%72%6F%77%73%65%72%3D%22%75%72%6C%3A%68%74%74%70%73%3A%2F%2F%73%6C%69%64%65%73%2E%63%6F%6D%2F%73%6C%6F%61%6E%32%31%38%39%2F%64%65%63%6B%2F%6C%69%76%65%3B%20%69%73%45%6E%63%6C%6F%73%75%72%65%3A%74%72%75%65%22%3E%0A%0A%20%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%0A%0A%20%3C%21%2D%2D%53%74%61%67%65%20%52%65%73%74%72%69%63%74%69%6F%6E%73%2D%2D%3E%0A%0A%09%09%09%3C%21%2D%2D%57%68%69%74%65%6C%69%73%74%65%64%20%55%73%65%72%73%3A%20%4C%69%61%20%28%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%29%2C%20%53%6C%6F%61%6E%20%28%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%29%2C%20%47%65%6E%65%73%69%73%20%28%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%29%2D%2D%3E%0A%0A%09%09%09%3C%61%2D%62%6F%78%20%63%6F%6C%6F%72%3D%22%74%6F%6D%61%74%6F%22%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%36%2E%37%20%30%20%2D%30%2E%38%22%20%77%69%64%74%68%3D%22%36%22%20%68%65%69%67%68%74%3D%22%35%30%22%20%64%65%70%74%68%3D%22%38%2E%36%22%61%6C%74%73%70%61%63%65%2D%63%75%72%73%6F%72%2D%63%6F%6C%6C%69%64%65%72%3D%22%65%6E%61%62%6C%65%64%3A%20%66%61%6C%73%65%22%20%6D%61%74%65%72%69%61%6C%3D%22%74%72%61%6E%73%70%61%72%65%6E%74%3A%20%74%72%75%65%3B%20%6F%70%61%63%69%74%79%3A%20%30%22%20%72%65%73%74%72%69%63%74%65%64%2D%7A%6F%6E%65%3D%22%75%73%65%72%69%64%73%3A%20%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%2C%20%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%2C%20%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%3B%20%74%61%72%67%65%74%3A%20%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%09%09%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%30%20%30%22%3E%3C%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%09%0A%0A%20%3C%21%2D%2D%53%74%61%67%65%20%52%65%73%74%72%69%63%74%69%6F%6E%73%32%2D%2D%3E%0A%0A%3C%21%2D%2D%57%68%69%74%65%6C%69%73%74%65%64%20%55%73%65%72%73%3A%20%4C%69%61%20%28%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%29%2C%20%53%6C%6F%61%6E%20%28%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%29%2C%20%47%65%6E%65%73%69%73%20%28%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%29%2D%2D%3E%0A%0A%09%09%09%3C%61%2D%62%6F%78%20%63%6F%6C%6F%72%3D%22%74%6F%6D%61%74%6F%22%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%38%2E%35%30%20%31%31%2E%30%35%20%37%2E%32%30%22%72%6F%74%61%74%69%6F%6E%3D%22%30%20%38%30%20%30%22%20%77%69%64%74%68%3D%22%36%2E%33%30%22%20%68%65%69%67%68%74%3D%22%31%30%22%20%64%65%70%74%68%3D%22%35%2E%35%30%22%20%6D%61%74%65%72%69%61%6C%3D%22%74%72%61%6E%73%70%61%72%65%6E%74%3A%20%74%72%75%65%3B%20%6F%70%61%63%69%74%79%3A%20%30%22%20%72%65%73%74%72%69%63%74%65%64%2D%7A%6F%6E%65%3D%22%75%73%65%72%69%64%73%3A%20%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%2C%20%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%2C%20%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%3B%20%74%61%72%67%65%74%3A%20%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%09%09%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%30%20%30%22%3E%3C%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%09%0A%0A%3C%21%2D%2D%53%74%61%67%65%20%52%65%73%74%72%69%63%74%69%6F%6E%73%33%2D%2D%3E%0A%0A%3C%21%2D%2D%57%68%69%74%65%6C%69%73%74%65%64%20%55%73%65%72%73%3A%20%4C%69%61%20%28%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%29%2C%20%53%6C%6F%61%6E%20%28%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%29%2C%20%47%65%6E%65%73%69%73%20%28%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%29%2D%2D%3E%0A%0A%09%09%09%3C%61%2D%62%6F%78%20%63%6F%6C%6F%72%3D%22%74%6F%6D%61%74%6F%22%20%70%6F%73%69%74%69%6F%6E%3D%22%2D%39%20%31%31%2E%30%35%20%2D%39%2E%31%37%22%72%6F%74%61%74%69%6F%6E%3D%22%30%20%31%30%30%20%30%22%20%77%69%64%74%68%3D%22%36%2E%33%30%22%20%68%65%69%67%68%74%3D%22%31%30%22%20%64%65%70%74%68%3D%22%35%2E%35%30%22%20%6D%61%74%65%72%69%61%6C%3D%22%74%72%61%6E%73%70%61%72%65%6E%74%3A%20%74%72%75%65%3B%20%6F%70%61%63%69%74%79%3A%20%30%22%20%72%65%73%74%72%69%63%74%65%64%2D%7A%6F%6E%65%3D%22%75%73%65%72%69%64%73%3A%20%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%2C%20%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%2C%20%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%3B%20%74%61%72%67%65%74%3A%20%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%09%09%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%30%20%30%22%3E%3C%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%09%0A%0A%0A%0A%20%3C%21%2D%2D%53%74%61%67%65%20%52%65%73%74%72%69%63%74%69%6F%6E%73%34%2D%2D%3E%0A%0A%09%09%09%3C%21%2D%2D%57%68%69%74%65%6C%69%73%74%65%64%20%55%73%65%72%73%3A%20%4C%69%61%20%28%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%29%2C%20%53%6C%6F%61%6E%20%28%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%29%2C%20%47%65%6E%65%73%69%73%20%28%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%29%2D%2D%3E%0A%0A%09%09%09%3C%61%2D%62%6F%78%20%63%6F%6C%6F%72%3D%22%62%6C%61%63%6B%22%20%70%6F%73%69%74%69%6F%6E%3D%22%39%2E%35%30%20%30%20%30%22%20%77%69%64%74%68%3D%22%31%30%22%20%68%65%69%67%68%74%3D%22%35%30%22%20%64%65%70%74%68%3D%22%31%31%22%20%6D%61%74%65%72%69%61%6C%3D%22%74%72%61%6E%73%70%61%72%65%6E%74%3A%20%74%72%75%65%3B%20%6F%70%61%63%69%74%79%3A%20%30%2E%34%30%22%20%72%65%73%74%72%69%63%74%65%64%2D%7A%6F%6E%65%3D%22%75%73%65%72%69%64%73%3A%20%34%30%33%31%34%37%32%34%33%34%33%32%39%36%38%39%31%30%2C%20%34%38%32%31%31%38%32%30%38%35%37%37%33%33%39%37%32%31%2C%20%34%30%34%34%38%38%39%37%31%32%36%38%31%32%39%32%39%35%3B%20%74%61%72%67%65%74%3A%20%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%09%09%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%72%65%73%74%72%69%63%74%65%64%2D%73%74%61%67%65%2D%72%65%73%70%61%77%6E%22%20%70%6F%73%69%74%69%6F%6E%3D%22%30%20%30%20%30%22%3E%3C%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%20%20%20%20%20%20%20%0A%0A%0A%0A%20%3C%21%2D%2D%73%70%61%77%6E%69%6E%74%72%61%63%74%61%62%6C%65%2D%62%65%65%72%2D%2D%3E%0A%0A%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%73%70%61%77%6E%65%72%3D%27%72%65%73%3A%20%69%6E%74%65%72%61%63%74%61%62%6C%65%73%2F%63%61%6E%2D%62%65%65%72%2D%6D%69%6C%6C%65%6E%6E%69%61%6C%65%27%72%6F%74%61%74%69%6F%6E%3D%22%30%20%2D%39%30%20%30%22%70%6F%73%69%74%69%6F%6E%3D%22%2D%38%20%31%2E%32%33%20%2D%31%22%73%63%61%6C%65%3D%22%31%2E%35%30%20%31%2E%35%30%20%31%2E%35%30%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%0A%0A%20%3C%21%2D%2D%73%70%61%77%6E%69%6E%74%72%61%63%74%61%62%6C%65%2D%6D%65%6C%6F%6E%2D%2D%3E%0A%0A%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%73%70%61%77%6E%65%72%3D%27%72%65%73%3A%20%69%6E%74%65%72%61%63%74%61%62%6C%65%73%2F%63%61%6E%2D%73%6F%64%61%2D%6D%65%6C%6F%6E%27%72%6F%74%61%74%69%6F%6E%3D%22%30%20%2D%39%30%20%30%22%70%6F%73%69%74%69%6F%6E%3D%22%2D%31%30%2E%36%30%20%31%2E%30%39%20%2D%31%30%22%73%63%61%6C%65%3D%22%31%2E%35%30%20%31%2E%35%30%20%31%2E%35%30%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%20%0A%0A%20%3C%21%2D%2D%73%70%61%77%6E%69%6E%74%72%61%63%74%61%62%6C%65%2D%63%6F%69%6E%2D%2D%3E%0A%0A%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%73%70%61%77%6E%65%72%3D%27%72%65%73%3A%20%69%6E%74%65%72%61%63%74%61%62%6C%65%73%2F%63%6F%69%6E%27%72%6F%74%61%74%69%6F%6E%3D%22%34%30%20%30%20%30%22%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%35%39%20%31%2E%34%32%20%31%30%2E%33%30%22%73%63%61%6C%65%3D%22%31%20%31%20%31%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%0A%0A%0A%0A%20%3C%21%2D%2D%73%70%61%77%6E%69%6E%74%72%61%63%74%61%62%6C%65%2D%67%6C%6F%77%73%74%69%63%6B%2D%2D%3E%0A%0A%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%6E%2D%73%70%61%77%6E%65%72%3D%27%72%65%73%3A%20%69%6E%74%65%72%61%63%74%61%62%6C%65%73%2F%67%6C%6F%77%73%74%69%63%6B%2D%62%6C%75%65%27%72%6F%74%61%74%69%6F%6E%3D%22%30%20%30%20%39%30%22%70%6F%73%69%74%69%6F%6E%3D%22%2D%37%2E%35%39%20%31%2E%32%37%20%31%30%2E%32%32%22%73%63%61%6C%65%3D%22%31%20%31%20%31%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%20%0A%0A%3C%21%2D%2D%6D%75%73%69%63%73%6C%6F%61%6E%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%35%2E%35%30%20%36%20%30%22%3E%0A%0A%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%70%63%2D%6D%22%20%73%79%6E%63%3D%22%6F%77%6E%2D%6F%6E%3A%20%6D%22%20%73%79%6E%63%2D%6E%2D%73%6F%75%6E%64%20%6E%2D%73%6F%75%6E%64%3D%22%6F%6E%3A%20%6D%3B%20%73%72%63%3A%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%53%6C%6F%61%6E%2D%74%61%6C%6B%2D%73%68%6F%77%2F%6D%61%73%74%65%72%2F%73%6F%75%6E%64%65%66%66%65%63%74%73%2F%73%6C%6F%61%6E%2E%6F%67%67%3B%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%67%65%61%72%2D%6D%22%20%73%79%6E%63%3D%22%6F%77%6E%2D%6F%6E%3A%20%6D%22%20%73%79%6E%63%2D%6E%2D%73%6F%75%6E%64%20%6E%2D%73%6F%75%6E%64%3D%22%6F%6E%3A%20%6D%3B%20%73%72%63%3A%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%53%6C%6F%61%6E%2D%74%61%6C%6B%2D%73%68%6F%77%2F%6D%61%73%74%65%72%2F%73%6F%75%6E%64%65%66%66%65%63%74%73%2F%73%6C%6F%61%6E%2E%6D%70%33%3B%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%3C%61%2D%62%6F%78%20%77%69%72%65%3D%22%6F%6E%3A%20%63%6C%69%63%6B%3B%20%65%6D%69%74%3A%20%6D%3B%20%74%61%72%67%65%74%73%3A%20%23%70%63%2D%6D%2C%20%23%67%65%61%72%2D%6D%3B%22%20%63%6F%6C%6F%72%3D%22%72%65%64%22%64%65%70%74%68%3D%22%30%2E%32%22%20%68%65%69%67%68%74%3D%22%30%2E%32%22%20%77%69%64%74%68%3D%22%30%2E%32%22%6F%70%61%63%69%74%79%3D%22%31%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%30%20%30%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%20%20%20%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%0A%0A%20%20%20%3C%21%2D%2D%69%6E%74%72%6F%2D%2D%3E%0A%0A%0A%0A%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%35%2E%35%30%20%37%20%30%22%3E%0A%0A%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%70%63%2D%69%22%20%73%79%6E%63%3D%22%6F%77%6E%2D%6F%6E%3A%20%69%22%20%73%79%6E%63%2D%6E%2D%73%6F%75%6E%64%20%6E%2D%73%6F%75%6E%64%3D%22%6F%6E%3A%20%69%3B%20%73%72%63%3A%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%69%6E%74%72%6F%6D%75%73%69%63%2F%4D%79%5F%2D%5F%49%6E%74%72%6F%2E%6F%67%67%3B%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%67%65%61%72%2D%69%22%20%73%79%6E%63%3D%22%6F%77%6E%2D%6F%6E%3A%20%69%22%20%73%79%6E%63%2D%6E%2D%73%6F%75%6E%64%20%6E%2D%73%6F%75%6E%64%3D%22%6F%6E%3A%20%69%3B%20%73%72%63%3A%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%4D%6F%6E%74%72%65%61%6C%2F%6D%61%73%74%65%72%2F%69%6E%74%72%6F%6D%75%73%69%63%2F%4D%79%25%32%30%2D%25%32%30%49%6E%74%72%6F%2E%6D%70%33%3B%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%3C%61%2D%62%6F%78%20%77%69%72%65%3D%22%6F%6E%3A%20%63%6C%69%63%6B%3B%20%65%6D%69%74%3A%20%69%3B%20%74%61%72%67%65%74%73%3A%20%23%70%63%2D%69%2C%20%23%67%65%61%72%2D%69%3B%22%20%63%6F%6C%6F%72%3D%22%62%6C%75%65%22%64%65%70%74%68%3D%22%30%2E%32%22%20%68%65%69%67%68%74%3D%22%30%2E%32%22%20%77%69%64%74%68%3D%22%30%2E%32%22%6F%70%61%63%69%74%79%3D%22%31%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%30%20%30%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%20%20%20%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%0A%0A%0A%0A%20%20%20%20%3C%21%2D%2D%74%72%65%61%6E%62%6F%6E%65%2D%2D%3E%0A%0A%0A%0A%20%3C%61%2D%65%6E%74%69%74%79%20%70%6F%73%69%74%69%6F%6E%3D%22%35%2E%35%30%20%36%20%30%2E%35%30%22%3E%0A%0A%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%70%63%2D%73%22%20%73%79%6E%63%3D%22%6F%77%6E%2D%6F%6E%3A%20%73%22%20%73%79%6E%63%2D%6E%2D%73%6F%75%6E%64%20%6E%2D%73%6F%75%6E%64%3D%22%6F%6E%3A%20%73%3B%20%73%72%63%3A%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%53%6C%6F%61%6E%2D%74%61%6C%6B%2D%73%68%6F%77%2F%6D%61%73%74%65%72%2F%73%6F%75%6E%64%65%66%66%65%63%74%73%2F%53%61%64%5F%54%72%6F%6D%62%6F%6E%65%5F%2D%5F%53%61%64%5F%54%72%6F%6D%62%6F%6E%65%2E%6F%67%67%3B%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%3C%61%2D%65%6E%74%69%74%79%20%69%64%3D%22%67%65%61%72%2D%73%22%20%73%79%6E%63%3D%22%6F%77%6E%2D%6F%6E%3A%20%73%22%20%73%79%6E%63%2D%6E%2D%73%6F%75%6E%64%20%6E%2D%73%6F%75%6E%64%3D%22%6F%6E%3A%20%73%3B%20%73%72%63%3A%68%74%74%70%73%3A%2F%2F%72%61%77%67%69%74%2E%63%6F%6D%2F%4C%69%61%30%32%31%2F%53%6C%6F%61%6E%2D%74%61%6C%6B%2D%73%68%6F%77%2F%6D%61%73%74%65%72%2F%73%6F%75%6E%64%65%66%66%65%63%74%73%2F%53%61%64%25%32%30%54%72%6F%6D%62%6F%6E%65%25%32%30%2D%25%32%30%53%61%64%25%32%30%54%72%6F%6D%62%6F%6E%65%2E%6D%70%33%3B%22%3E%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%09%3C%61%2D%62%6F%78%20%77%69%72%65%3D%22%6F%6E%3A%20%63%6C%69%63%6B%3B%20%65%6D%69%74%3A%20%73%3B%20%74%61%72%67%65%74%73%3A%20%23%70%63%2D%73%2C%20%23%67%65%61%72%2D%73%3B%22%20%63%6F%6C%6F%72%3D%22%79%65%6C%6C%6F%77%22%64%65%70%74%68%3D%22%30%2E%32%22%20%68%65%69%67%68%74%3D%22%30%2E%32%22%20%77%69%64%74%68%3D%22%30%2E%32%22%6F%70%61%63%69%74%79%3D%22%31%22%20%72%6F%74%61%74%69%6F%6E%3D%22%30%20%30%20%30%22%3E%3C%2F%61%2D%62%6F%78%3E%0A%0A%20%20%20%3C%2F%61%2D%65%6E%74%69%74%79%3E%0A%0A%0A%0A%20%3C%21%2D%2D%73%6B%79%2D%2D%3E%0A%0A%0A%0A%20%3C%61%2D%73%6B%79%20%72%61%64%69%75%73%3D%22%33%30%30%22%20%63%6F%6C%6F%72%3D%22%62%6C%61%63%6B%22%3E%3C%2F%61%2D%73%6B%79%3E%0A%0A%0A%0A%09%09%3C%2F%61%2D%73%63%65%6E%65%3E%0A%0A%09%3C%2F%62%6F%64%79%3E'));
+</script>
 </html>
-
