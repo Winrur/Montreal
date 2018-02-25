@@ -154,7 +154,7 @@
  
   <!--glass2-->
      
- <a-entity position="-10.70 1.09 -11.50" scale="1 1 1" rotation="0 0 0" collada-model="#glass"n-mesh-collider="type: environment; convex: false"></a-entity>    
+ <a-entity position="-10.70 1.09 -11.50" scale="1 1 1" rotation="0 0 0" collada-model="#glass"altspace-cursor-collider="enabled: false"></a-entity>    
   
 
  <!--pillow-->
@@ -260,6 +260,10 @@
 
 <a-image position="0.50 1.80 -7.08" altspace-cursor-collider="enabled: false"height="1"width="0.70" rotation="0 0 0"src="https://rawgit.com/Lia021/Montreal/master/drink%20add.jpg"></a-image>
 
+<!--message-->
+
+<a-image position="0 1.15 17.35" altspace-cursor-collider="enabled: false"height="0.70"width="0.70" rotation="-90 0 0"src="https://rawgit.com/Lia021/Montreal/master/message.jpg"></a-image>
+
 
 
  <!--inclser-->
@@ -274,11 +278,21 @@
 			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
 		
  <!--Stage Restrictions2-->
+<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
+			<a-box color="tomato" position="-8.50 11.05 7.20"rotation="0 80 0" width="6.30" height="10" depth="5.50" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
+			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
+		
+<!--Stage Restrictions3-->
+<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
+			<a-box color="tomato" position="-9 11.05 -9.17"rotation="0 100 0" width="6.30" height="10" depth="5.50" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
+			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
+		
+
+ <!--Stage Restrictions4-->
 			<!--Whitelisted Users: Lia (403147243432968910), Sloan (482118208577339721), Genesis (404488971268129295)-->
 			<a-box color="black" position="9.50 0 0" width="10" height="50" depth="11"altspace-cursor-collider="enabled: false" material="transparent: true; opacity: 0" restricted-zone="userids: 403147243432968910, 482118208577339721, 404488971268129295; target: restricted-stage-respawn"></a-box>
 			<a-entity id="restricted-stage-respawn" position="0 0 0"><a-entity>
         
-				
 
  <!--spawnintractable-beer-->
 
@@ -292,6 +306,7 @@
 
  <a-entity n-spawner='res: interactables/coin'rotation="40 0 0"position="-7.59 1.42 10.30"scale="1 1 1"></a-entity>
  
+
  <!--spawnintractable-glowstick-->
 
  <a-entity n-spawner='res: interactables/glowstick-blue'rotation="0 0 90"position="-7.59 1.27 10.22"scale="1 1 1"></a-entity>
